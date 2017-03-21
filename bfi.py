@@ -26,7 +26,7 @@ Reference:
 
 
 class Processor:
-    def __init__(self, ramsize=1024):
+    def __init__(self, ramsize=1024, istest=False):
         self._mapping = {
             ">": self._incptr,
             "<": self._decptr,
@@ -39,23 +39,36 @@ class Processor:
         }
         self._ramsize = ramsize
         self._reset()
+        self._prepare_testing(istest)
 
-    def run(self, program):
-        self._reset()
+    def run(self, program, inputdata=""):
+        self._reset(inputdata)
         self._program = program
         proglen = len(program)
-        while self._pc < proglen:
+        while self._pc < proglen and not self._halted:
             try:
                 self._mapping[program[self._pc]]()
             except KeyError:
                 pass
             finally:
                 self._pc += 1
+        self._halted = True
 
-    def _reset(self):
+    def halt(self):
+        self._halted = True
+
+    def _reset(self, inputdata=""):
         self._ram = list([0] * self._ramsize)
         self._pointer = 0
         self._pc = 0
+        self._halted = False
+
+        self._inputdata = inputdata
+        self._inputindex = 0
+        self._outputdata = ""
+
+    def _prepare_testing(self, istest):
+        self._istest = istest
 
     def _incptr(self):
         self._pointer += 1
@@ -70,11 +83,27 @@ class Processor:
         self._ram[self._pointer] -= 1
 
     def _output(self):
-        byte = self._ram[self._pointer]
-        print(chr(byte), end="")
+        char = chr(self._ram[self._pointer])
+        if self._istest:
+            self._outputdata += char
+        else:
+            print(char, end="")
 
     def _input(self):
-        self._ram[self._pointer] = msvcrt.getch()[0]
+        if self._istest:
+            try:
+                byte = ord(self._inputdata[self._inputindex])
+                self._inputindex += 1
+            except IndexError:
+                self.halt()
+                return
+        else:
+            byte = msvcrt.getch()[0]
+
+            # Most Brainfuck programs expect value 10 for newlines
+            if byte == 13:
+                byte = 10
+        self._ram[self._pointer] = byte
 
     def _loopstart(self):
         self._setpc(True)
