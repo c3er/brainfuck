@@ -9,6 +9,14 @@ import msvcrt
 
 _helptext = """Brainfuck interpreter
 
+Usage:
+
+bfi
+Type in the program to eecute directly.
+
+bfi <file>
+The program to execute will be read from the given file.
+
 Reference:
 >  increment the data pointer (to point to the next cell to the right).
 <  decrement the data pointer (to point to the next cell to the left).
@@ -26,7 +34,7 @@ Reference:
 
 
 class Processor:
-    def __init__(self, ramsize=1024, istest=False):
+    def __init__(self, ramsize=30000, istest=False):
         self._mapping = {
             ">": self._incptr,
             "<": self._decptr,
