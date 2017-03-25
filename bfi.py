@@ -73,7 +73,7 @@ class Processor:
 
         self._inputdata = inputdata
         self._inputindex = 0
-        self._outputdata = ""
+        self.outputdata = ""
 
     def _prepare_testing(self, istest):
         self._istest = istest
@@ -93,7 +93,7 @@ class Processor:
     def _output(self):
         char = chr(self._ram[self._pointer])
         if self._istest:
-            self._outputdata += char
+            self.outputdata += char
         else:
             print(char, end="")
 
@@ -108,7 +108,7 @@ class Processor:
         else:
             byte = msvcrt.getch()[0]
 
-            # Most Brainfuck programs expect value 10 for newlines
+            # Most Brainfuck programs expect value 10 as newline character
             if byte == 13:
                 byte = 10
         self._ram[self._pointer] = byte

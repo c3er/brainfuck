@@ -1,0 +1,21 @@
+{
+    "examples": [
+        {
+            "file": "hello1.bf",
+            "output": "Hello World!\n"
+        },
+        {
+            "file": "hello2.bf",
+            "output": "Hello World!\n"
+        },
+        {
+            "file": "add-to-7.bf",
+            "output": "7"
+        },
+        {
+            "file": "rot13.bf",
+            "input": "Hello World!",
+            "output": "Uryyb Jbeyq!"
+        }
+    ]
+}
