@@ -108,10 +108,11 @@ class Processor:
         else:
             byte = msvcrt.getch()[0]
 
-            # Most Brainfuck programs expect value 10 as newline character
             if byte == 13:
+                # Most Brainfuck programs expect value 10 as newline character
                 byte = 10
             elif byte == 3:
+                # Ctrl+C was pressed
                 raise KeyboardInterrupt()
         self._ram[self._pointer] = byte
 
