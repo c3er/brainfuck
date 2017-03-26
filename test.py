@@ -44,16 +44,16 @@ def parse_json(jsonfile):
     return [Example.from_dict(d) for d in data["examples"]]
 
 
-def run2msg(example, actual_output):
-    succeeded = example.outputdata == actual_output
+def run2msg(example, actual_output, succeeded):
+    #succeeded = example.outputdata == actual_output
     inputdata = example.inputdata
-    return "{}\nFile: {}\nOutput: {} {} {}\n{}".format(
+    return '{}\nFile: {}\nOutput: "{}" {} "{}"\n{}'.format(
         "OK" if succeeded else "FAIL",
         example.filename,
         example.outputdata,
         "==" if succeeded else "!=",
         actual_output,
-        "(Input: {})\n".format(inputdata) if inputdata else ""
+        '(Input: "{}")\n'.format(inputdata) if inputdata else ""
     )
 
 
@@ -62,6 +62,8 @@ def main():
     example_dir = os.path.join(basepath, EXAMPLE_DIR)
     examples_file = os.path.join(basepath, EXAMPLES_FILE)
 
+    failed_list = []
+
     processor = bfi.Processor(istest=True)
     examples = parse_json(examples_file)
     for example in examples:
@@ -69,7 +71,18 @@ def main():
         with open(path, encoding="utf8") as f:
             program = f.read()
         processor.run(program, example.inputdata)
-        print(run2msg(example, processor.outputdata))
+
+        actual_output = processor.outputdata
+        succeeded = example.outputdata == actual_output
+        msg = run2msg(example, actual_output, succeeded)
+        print(msg)
+        if not succeeded:
+            failed_list.append(msg)
+
+    if failed_list:
+        print("{} tests failed".format(len(failed_list)))
+        for failed in failed_list:
+            print(failed)
 
 
 if __name__ == "__main__":
