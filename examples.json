@@ -16,6 +16,10 @@
             "file": "rot13.bf",
             "input": "Hello World!",
             "output": "Uryyb Jbeyq!"
+        },
+        {
+            "file": "conv123.bf",
+            "output": "123"
         }
     ]
 }

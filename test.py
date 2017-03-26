@@ -53,7 +53,7 @@ def run2msg(example, actual_output):
         example.outputdata,
         "==" if succeeded else "!=",
         actual_output,
-        "(Input: {})".format(inputdata) if inputdata else ""
+        "(Input: {})\n".format(inputdata) if inputdata else ""
     )
 
 

@@ -66,7 +66,7 @@ class Processor:
         self._halted = True
 
     def _reset(self, inputdata=""):
-        self._ram = list([0] * self._ramsize)
+        self._ram = [0] * self._ramsize
         self._pointer = 0
         self._pc = 0
         self._halted = False
