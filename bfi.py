@@ -35,7 +35,7 @@ Reference:
 
 class Processor:
     def __init__(self, ramsize=30000, istest=False):
-        self._mapping = {
+        self._operation_mapping = {
             ">": self._incptr,
             "<": self._decptr,
             "+": self._incval,
@@ -52,10 +52,11 @@ class Processor:
     def run(self, program, inputdata=""):
         self._reset(inputdata)
         self._program = program
+        self._brace_mapping = self._get_braces(program)
         proglen = len(program)
         while self._pc < proglen and not self._halted:
             try:
-                self._mapping[program[self._pc]]()
+                self._operation_mapping[program[self._pc]]()
             except KeyError:
                 pass
             finally:
@@ -77,6 +78,25 @@ class Processor:
 
     def _prepare_testing(self, istest):
         self._istest = istest
+
+    @staticmethod
+    def _get_braces(program):
+        opening_braces = []
+        brace_mapping = {}
+        for i, c in enumerate(program):
+            if c == "[":
+                opening_braces.append(i)
+            elif c == "]":
+                try:
+                    matching_brace = opening_braces.pop()
+                except IndexError:
+                    raise Exception(
+                        "There is no matching opening brace to this closing brace found (Character No. {})"
+                        .format(i)
+                    )
+                brace_mapping[matching_brace] = i
+                brace_mapping[i] = matching_brace
+        return brace_mapping
 
     def _incptr(self):
         self._pointer += 1
@@ -123,24 +143,8 @@ class Processor:
         self._setpc(False)
 
     def _setpc(self, isloopstart):
-        if isloopstart:
-            value = 1
-            condition = self._ram[self._pointer] == 0
-        else:
-            value = -1
-            condition = self._ram[self._pointer] != 0
-
-        if condition:
-            pc = self._pc
-            program = self._program
-            count = 1
-            while count > 0:
-                pc += value
-                if program[pc] == "[":
-                    count += value
-                elif program[pc] == "]":
-                    count -= value
-            self._pc = pc
+        if (self._ram[self._pointer] == 0) == isloopstart:
+            self._pc = self._brace_mapping[self._pc]
 
 
 def main():

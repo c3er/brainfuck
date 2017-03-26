@@ -45,7 +45,6 @@ def parse_json(jsonfile):
 
 
 def run2msg(example, actual_output, succeeded):
-    #succeeded = example.outputdata == actual_output
     inputdata = example.inputdata
     return '{}\nFile: {}\nOutput: "{}" {} "{}"\n{}'.format(
         "OK" if succeeded else "FAIL",
