@@ -111,6 +111,8 @@ class Processor:
             # Most Brainfuck programs expect value 10 as newline character
             if byte == 13:
                 byte = 10
+            elif byte == 3:
+                raise KeyboardInterrupt()
         self._ram[self._pointer] = byte
 
     def _loopstart(self):
