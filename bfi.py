@@ -51,7 +51,6 @@ class Processor:
 
     def run(self, program, inputdata=""):
         self._reset(inputdata)
-        self._program = program
         self._brace_mapping = self._get_braces(program)
         proglen = len(program)
         while self._pc < proglen and not self._halted:
@@ -61,7 +60,7 @@ class Processor:
                 pass
             finally:
                 self._pc += 1
-        self._halted = True
+        self.halt()
 
     def halt(self):
         self._halted = True
@@ -72,6 +71,7 @@ class Processor:
         self._pc = 0
         self._halted = False
 
+        # Testing related
         self._inputdata = inputdata
         self._inputindex = 0
         self.outputdata = ""
