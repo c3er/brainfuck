@@ -82,6 +82,8 @@ def main():
         print("{} tests failed".format(len(failed_list)))
         for failed in failed_list:
             print(failed)
+    else:
+        print("All tests passed")
 
 
 if __name__ == "__main__":
