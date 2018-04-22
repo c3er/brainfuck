@@ -87,13 +87,7 @@ class Processor:
             if c == "[":
                 opening_braces.append(i)
             elif c == "]":
-                try:
-                    matching_brace = opening_braces.pop()
-                except IndexError:
-                    raise Exception(
-                        "There is no matching opening brace to this closing brace found (Character No. {})"
-                        .format(i)
-                    )
+                matching_brace = opening_braces.pop()
                 brace_mapping[matching_brace] = i
                 brace_mapping[i] = matching_brace
         return brace_mapping
