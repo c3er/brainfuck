@@ -2,12 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-import sys
-
-import msvcrt
-
-
-_helptext = """Brainfuck interpreter
+"""Brainfuck interpreter
 
 Usage:
 
@@ -31,6 +26,11 @@ Reference:
    instruction pointer forward to the next command, jump it back to the command
    after the matching [ command.
 """
+
+
+import sys
+
+import msvcrt
 
 
 class Processor:
@@ -127,7 +127,6 @@ class Processor:
                 return
         else:
             byte = msvcrt.getch()[0]
-
             if byte == 13:
                 # Most Brainfuck programs expect value 10 as newline character
                 byte = 10
@@ -156,7 +155,7 @@ def main():
         with open(args[1], encoding="utf8") as f:
             program = f.read()
     else:
-        print(_helptext)
+        print(__doc__)
         sys.exit(1)
 
     Processor().run(program)

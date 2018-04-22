@@ -52,6 +52,9 @@ def run2msg(example, actual_output, succeeded):
         example.outputdata,
         "==" if succeeded else "!=",
         actual_output,
+
+        # Reason for nested format string: There is no better way known to avoid
+        # an additional linebreak if there is no input data.
         '(Input: "{}")\n'.format(inputdata) if inputdata else ""
     )
 
@@ -61,7 +64,7 @@ def main():
     example_dir = os.path.join(basepath, EXAMPLE_DIR)
     examples_file = os.path.join(basepath, EXAMPLES_FILE)
 
-    failed_list = []
+    failed_tests = []
 
     processor = bfi.Processor(istest=True)
     examples = parse_json(examples_file)
@@ -76,11 +79,11 @@ def main():
         msg = run2msg(example, actual_output, succeeded)
         print(msg)
         if not succeeded:
-            failed_list.append(msg)
+            failed_tests.append(msg)
 
-    if failed_list:
-        print("{} tests failed".format(len(failed_list)))
-        for failed in failed_list:
+    if failed_tests:
+        print("{} tests failed".format(len(failed_tests)))
+        for failed in failed_tests:
             print(failed)
     else:
         print("All tests passed")
